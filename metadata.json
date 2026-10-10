@@ -1,0 +1,6 @@
+{
+  "name": "Hamilton: The Story Behind the Story",
+  "description": "An immersive Broadway musical and historical digital humanities archive exploring Alexander Hamilton, the revolution, original documents, and the score.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
