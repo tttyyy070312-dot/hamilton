@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Star, ChevronDown, Sparkles, BookOpen, Film } from 'lucide-react';
 import { hamiltonAudio } from '../services/audioEngine';
+import starPosterImg from '../assets/images/hamilton_star_poster_1791621766100.jpg';
+import theatreImg from '../assets/images/broadway_richard_rodgers_1791621777237.jpg';
 
 interface LandingStageProps {
   onEnter: () => void;
@@ -58,7 +60,7 @@ export const LandingStage: React.FC<LandingStageProps> = ({ onEnter }) => {
         {landingMode === 'poster' ? (
           <>
             <img
-              src="/src/assets/images/hamilton_star_poster_1791621766100.jpg"
+              src={starPosterImg}
               alt="Hamilton Broadway Emblem"
               referrerPolicy="no-referrer"
               className={`w-full h-full object-cover object-center transition-opacity duration-1000 ${
@@ -71,7 +73,7 @@ export const LandingStage: React.FC<LandingStageProps> = ({ onEnter }) => {
         ) : (
           <>
             <img
-              src="/src/assets/images/broadway_richard_rodgers_1791621777237.jpg"
+              src={theatreImg}
               alt="Broadway Richard Rodgers Theatre"
               referrerPolicy="no-referrer"
               className={`w-full h-full object-cover object-center transition-opacity duration-1000 ${

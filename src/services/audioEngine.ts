@@ -518,7 +518,17 @@ class HamiltonAudioSynthesizer {
   private listeners: Array<() => void> = [];
 
   constructor() {
-    // AudioContext will be initialized on user interaction or first call
+    if (typeof window !== 'undefined') {
+      const unlockAudio = () => {
+        if (this.ctx && this.ctx.state === 'suspended' && !this.isMuted) {
+          this.ctx.resume().catch(() => {});
+        }
+        window.removeEventListener('click', unlockAudio);
+        window.removeEventListener('touchstart', unlockAudio);
+      };
+      window.addEventListener('click', unlockAudio, { passive: true });
+      window.addEventListener('touchstart', unlockAudio, { passive: true });
+    }
   }
 
   public resolveTrack(trackId: string): TrackDefinition {
@@ -565,15 +575,21 @@ class HamiltonAudioSynthesizer {
   }
 
   private initContext() {
-    if (!this.ctx) {
-      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      this.ctx = new AudioCtx();
-      this.masterGain = this.ctx.createGain();
-      this.masterGain.gain.setValueAtTime(this.isMuted ? 0 : this.volume, this.ctx.currentTime);
-      this.masterGain.connect(this.ctx.destination);
-    }
-    if (this.ctx.state === 'suspended') {
-      this.ctx.resume();
+    try {
+      if (!this.ctx && typeof window !== 'undefined') {
+        const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+        if (AudioCtx) {
+          this.ctx = new AudioCtx();
+          this.masterGain = this.ctx.createGain();
+          this.masterGain.gain.setValueAtTime(this.isMuted ? 0 : this.volume, this.ctx.currentTime);
+          this.masterGain.connect(this.ctx.destination);
+        }
+      }
+      if (this.ctx && this.ctx.state === 'suspended' && !this.isMuted) {
+        this.ctx.resume().catch(() => {});
+      }
+    } catch {
+      // Graceful fallback for non-audio or sandboxed environments
     }
   }
 
@@ -602,6 +618,9 @@ class HamiltonAudioSynthesizer {
     this.initContext();
     this.isMuted = muted;
     if (this.masterGain && this.ctx) {
+      if (!muted && this.ctx.state === 'suspended') {
+        this.ctx.resume().catch(() => {});
+      }
       const targetGain = muted ? 0 : this.volume;
       this.masterGain.gain.setTargetAtTime(targetGain, this.ctx.currentTime, 0.08);
     }
@@ -687,6 +706,10 @@ class HamiltonAudioSynthesizer {
 
   private playStep() {
     if (!this.ctx || !this.masterGain) return;
+    if (this.isMuted || this.ctx.state === 'suspended') {
+      this.noteIndex++;
+      return;
+    }
 
     const track = this.resolveTrack(this.currentTrackId);
     const pattern = track.motifPattern;

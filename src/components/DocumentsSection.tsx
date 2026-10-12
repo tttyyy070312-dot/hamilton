@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { DOCUMENT_ARCHIVES } from '../data/hamiltonData';
 import { DocumentArchive } from '../types/hamilton';
 import { FileText, Feather, Scroll, Calendar, Award, ExternalLink } from 'lucide-react';
+import archiveImg from '../assets/images/founding_fathers_archive_1791621792865.jpg';
 
 export const DocumentsSection: React.FC = () => {
   const [selectedDoc, setSelectedDoc] = useState<DocumentArchive>(DOCUMENT_ARCHIVES[0]);
@@ -51,7 +52,7 @@ export const DocumentsSection: React.FC = () => {
         <div className="lg:col-span-5 bg-gradient-to-b from-[#11192e] to-[#090e1b] border border-[#2b3a61] rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between">
           <div className="relative h-56 sm:h-64 overflow-hidden border-b border-[#243354]">
             <img
-              src="/src/assets/images/founding_fathers_archive_1791621792865.jpg"
+              src={archiveImg}
               alt="Founding Fathers Manuscript Desk"
               referrerPolicy="no-referrer"
               className="w-full h-full object-cover object-center brightness-90 contrast-105"

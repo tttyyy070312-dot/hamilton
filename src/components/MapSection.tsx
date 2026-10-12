@@ -3,6 +3,7 @@ import { MAP_LOCATIONS } from '../data/hamiltonData';
 import { MapLocation } from '../types/hamilton';
 import { MapPin, Navigation, Compass, Play, Globe } from 'lucide-react';
 import { hamiltonAudio } from '../services/audioEngine';
+import duelImg from '../assets/images/weehawken_duel_clash_1791621801727.jpg';
 
 export const MapSection: React.FC = () => {
   const [selectedLoc, setSelectedLoc] = useState<MapLocation>(MAP_LOCATIONS[0]);
@@ -105,7 +106,7 @@ export const MapSection: React.FC = () => {
           {selectedLoc.id === 'weehawken' ? (
             <div className="rounded-xl overflow-hidden mb-5 border border-[#2b3a61] relative h-48 sm:h-56">
               <img
-                src="/src/assets/images/weehawken_duel_clash_1791621801727.jpg"
+                src={duelImg}
                 alt="Weehawken Dueling Grounds"
                 referrerPolicy="no-referrer"
                 className="w-full h-full object-cover"
